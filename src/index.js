@@ -1,6 +1,11 @@
+import "./style.css";
+
 const GROUP_ID = "cohort3";
 const TOKEN = "361584ad-ce3b-45ac-9ca2-820a2f350a53";
 const HOST = "95.216.175.5";
+const serverUrl = NODE_ENV === 'development'
+  ? 'http://praktikum.tk/название_группы'
+  : 'https://praktikum.tk;
 
 const root = document.querySelector(".root");
 const popup = root.querySelector(".popup");
