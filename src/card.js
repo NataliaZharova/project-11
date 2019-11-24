@@ -9,18 +9,28 @@ const cardTpl = `
     </div>
   </div>`;
 
-class Card {
-  constructor(name, link) {
+export class Card {
+  constructor(name, link, onOpen) {
     this.name = name;
     this.link = link;
+    this.onOpen = onOpen;
     this.el = this.create(name, link);
-    // параметры из create можно убрать они не используются
     this.placeCardImage = this.el.querySelector(".place-card__image");
     this.likeButton = this.el.querySelector(".place-card__like-icon");
     this.deleteButton = this.el.querySelector(".place-card__delete-icon");
-    this.placeCardImage.addEventListener("click", openImage);
+    this.placeCardImage.addEventListener("click", ev => this.open(ev));
     this.likeButton.addEventListener("click", () => this.like());
     this.deleteButton.addEventListener("click", () => this.remove());
+  }
+
+  open(event) {
+    if (event.target.classList.contains("place-card__delete-icon")) {
+      // Удаление карточки
+      return;
+    } else {
+      const imageSrc = event.target.style.backgroundImage.slice(5, -2);
+      this.onOpen(imageSrc);
+    }
   }
 
   like() {
@@ -29,21 +39,15 @@ class Card {
 
   remove() {
     this.el.remove(this.el);
-    // Можно улучшить достаточно удалять элемент 
-    // this.el.remove() метод удаления не принимает параметров
-
-    // кроме удаления карточки важно удалить все добавленные обработчики
-    // через removeEventListener
-
   }
 
   create(name, link) {
     const wrap = document.createElement("div");
     wrap.innerHTML = cardTpl;
     wrap.querySelector(".place-card__name").textContent = this.name;
-    wrap.querySelector(".place-card__image").style.backgroundImage = `url(${
-      this.link
-    })`;
-    return wrap.firstElementChild; // Можно улучшить firstChild достаточно
+    wrap.querySelector(
+      ".place-card__image"
+    ).style.backgroundImage = `url(${this.link})`;
+    return wrap.firstElementChild;
   }
 }

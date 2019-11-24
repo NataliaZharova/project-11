@@ -1,25 +1,22 @@
-class CardList {
-  constructor(placesList, initialCards) {
+import { Card } from "./card";
+
+export class CardList {
+  constructor(placesList, initialCards, onOpenCard) {
     this.placesList = placesList;
     this.initialCards = initialCards;
+    this.onOpenCard = onOpenCard;
   }
 
   addCard(model) {
-    const { el } = new Card();
+    const { name, link } = model;
+    const { el } = new Card(name, link, this.onOpenCard);
     this.placesList.appendChild(el);
-    /**
-     * Можно улучшить 
-     * 
-     * Логика не работает - лучше вызывать внутри цикла
-     * с отправкой параметров в класс
-     */
   }
 
   render() {
     this.initialCards.forEach(model => {
-      const { el } = new Card(model.name, model.link);
+      const { el } = new Card(model.name, model.link, this.onOpenCard);
       this.placesList.appendChild(el);
-      // this.addCard
     });
   }
 }
